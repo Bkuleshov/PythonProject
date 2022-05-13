@@ -1,9 +1,24 @@
 import telebot
 import requests
 
+
 botToken = "5341494742:AAGTtkY2hNDVTnsTSHPDmZsY_t4aUTA31eo"
 apiKey = "bccc256b25008606026828a90cadfbf2"
 bot = telebot.TeleBot(botToken)
+
+@bot.message_handler(commands=['start'])
+def starting_message(message):
+    manual = 'Welcome to WeatherBot! To get the list of possible commands, print /help \n'
+    bot.send_message(message.chat.id, manual)
+
+@bot.message_handler(commands=['help'])
+def help_message(message):
+    manual = 'Here are available commands: \n'
+    manual += '/weather *city_name*: shows current weather in city you listed \n'
+    manual += '/forecast *city_name*: shows 5-day weather forecast in city you listed \n'
+    manual += '/coordinates *city_name*: shows latitude and longitude of city you listed \n'
+    manual += '/timezone *city_name*: shows timezone of city you listed \n'
+    bot.send_message(message.chat.id, manual)
 
 @bot.message_handler(commands=['weather'])
 def current_weather(message):
@@ -18,7 +33,6 @@ def current_weather(message):
     weather += 'Humidity: ' + str(data['main']['humidity']) + ' \n'
     weather += 'Wind speed: ' + str(data['wind']['speed']) + ' \n'
     bot.send_message(message.chat.id, weather)
-    
 
 @bot.message_handler(commands=['forecast'])
 def five_days_weather(message):
